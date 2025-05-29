@@ -51,31 +51,97 @@ const mockCharacters = [
 ];
 
 const Ranking = () => {
-  const [universeFilter, setUniverseFilter] = useState<string>("all");
-  const [genderFilter, setGenderFilter] = useState<string>("all");
-  const [ageFilter, setAgeFilter] = useState<string>("all");
-  const [rankFilter, setRankFilter] = useState<string>("all");
+  const [selectedUniverses, setSelectedUniverses] = useState<string[]>([]);
+  const [selectedGenders, setSelectedGenders] = useState<string[]>([]);
+  const [selectedAges, setSelectedAges] = useState<string[]>([]);
+  const [selectedRanks, setSelectedRanks] = useState<string[]>([]);
+
+  // Opciones disponibles
+  const universeOptions = [
+    { value: "Marvel", label: "Marvel" },
+    { value: "DC Comics", label: "DC Comics" },
+    { value: "Dragon Ball", label: "Dragon Ball" },
+    { value: "One Piece", label: "One Piece" },
+    { value: "Attack on Titan", label: "Attack on Titan" },
+    { value: "Hunter x Hunter", label: "Hunter x Hunter" },
+    { value: "Naruto", label: "Naruto" },
+    { value: "One Punch Man", label: "One Punch Man" },
+    { value: "Star Wars", label: "Star Wars" }
+  ];
+
+  const genderOptions = [
+    { value: "Male", label: "Male" },
+    { value: "Female", label: "Female" }
+  ];
+
+  const ageOptions = [
+    { value: "minor", label: "Under 18" },
+    { value: "adult", label: "18-100 years" },
+    { value: "ancient", label: "Over 100 years" }
+  ];
+
+  const rankOptions = [
+    { value: "top3", label: "Top 3" },
+    { value: "top10", label: "Top 10" },
+    { value: "top20", label: "Top 20" }
+  ];
+
+  // Funciones para manejar cambios en checkboxes
+  const handleUniverseChange = (universe: string) => {
+    setSelectedUniverses(prev => 
+      prev.includes(universe) 
+        ? prev.filter(u => u !== universe)
+        : [...prev, universe]
+    );
+  };
+
+  const handleGenderChange = (gender: string) => {
+    setSelectedGenders(prev => 
+      prev.includes(gender) 
+        ? prev.filter(g => g !== gender)
+        : [...prev, gender]
+    );
+  };
+
+  const handleAgeChange = (age: string) => {
+    setSelectedAges(prev => 
+      prev.includes(age) 
+        ? prev.filter(a => a !== age)
+        : [...prev, age]
+    );
+  };
+
+  const handleRankChange = (rank: string) => {
+    setSelectedRanks(prev => 
+      prev.includes(rank) 
+        ? prev.filter(r => r !== rank)
+        : [...prev, rank]
+    );
+  };
 
   // Filtros en tiempo real usando useMemo
   const filteredCharacters = useMemo(() => {
     // Paso 1: Aplicar todos los filtros excepto el de rango
     let filtered = mockCharacters.filter(character => {
-      // Filtro por universo
-      if (universeFilter !== "all" && character.universe.toLowerCase().replace(/\s+/g, '') !== universeFilter) {
+      // Filtro por universo (múltiple selección)
+      if (selectedUniverses.length > 0 && !selectedUniverses.includes(character.universe)) {
         return false;
       }
 
-      // Filtro por género
-      if (genderFilter !== "all") {
-        if (genderFilter === "male" && character.gender !== "Male") return false;
-        if (genderFilter === "female" && character.gender !== "Female") return false;
+      // Filtro por género (múltiple selección)
+      if (selectedGenders.length > 0 && !selectedGenders.includes(character.gender)) {
+        return false;
       }
 
-      // Filtro por edad
-      if (ageFilter !== "all") {
-        if (ageFilter === "minor" && character.age >= 18) return false;
-        if (ageFilter === "adult" && (character.age < 18 || character.age > 100)) return false;
-        if (ageFilter === "ancient" && character.age <= 100) return false;
+      // Filtro por edad (múltiple selección)
+      if (selectedAges.length > 0) {
+        const matchesAge = selectedAges.some(ageFilter => {
+          if (ageFilter === "minor" && character.age < 18) return true;
+          if (ageFilter === "adult" && character.age >= 18 && character.age <= 100) return true;
+          if (ageFilter === "ancient" && character.age > 100) return true;
+          return false;
+        });
+        if (!matchesAge) return false;
       }
 
       return true;
@@ -85,18 +151,20 @@ const Ranking = () => {
     filtered = filtered.sort((a, b) => b.powerLevel - a.powerLevel);
     
     // Paso 3: Aplicar filtro de rango basado en la posición dentro del grupo filtrado
-    if (rankFilter !== "all") {
-      if (rankFilter === "top3") {
-        filtered = filtered.slice(0, 3);
-      } else if (rankFilter === "top10") {
-        filtered = filtered.slice(0, 10);
-      } else if (rankFilter === "top20") {
-        filtered = filtered.slice(0, 20);
-      }
+    if (selectedRanks.length > 0) {
+      const maxRank = Math.max(
+        ...selectedRanks.map(rank => {
+          if (rank === "top3") return 3;
+          if (rank === "top10") return 10;
+          if (rank === "top20") return 20;
+          return 0;
+        })
+      );
+      filtered = filtered.slice(0, maxRank);
     }
 
     return filtered;
-  }, [universeFilter, genderFilter, ageFilter, rankFilter]);
+  }, [selectedUniverses, selectedGenders, selectedAges, selectedRanks]);
 
   const getRankBadgeColor = (rank: number) => {
     if (rank <= 3) return "bg-yellow-500";
@@ -134,84 +202,106 @@ const Ranking = () => {
             <h2 className="text-2xl font-bold text-white tracking-tight">Filters</h2>
           </div>
           
-          <div className="flex gap-6 flex-wrap">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Universe Filter */}
-            <div className="flex-1 min-w-60">
-              <label className="flex items-center gap-2 text-sm font-medium text-white/80 mb-3 tracking-wide">
+            <div>
+              <label className="flex items-center gap-2 text-sm font-medium text-white/80 mb-4 tracking-wide">
                 <Star size={16} className="text-blue-300" />
-                Universe
+                Universe ({selectedUniverses.length} selected)
               </label>
-              <select 
-                value={universeFilter}
-                onChange={(e) => setUniverseFilter(e.target.value)}
-                className="w-full p-4 bg-white/20 backdrop-blur-sm border border-white/30 rounded-xl focus:ring-2 focus:ring-blue-400 focus:border-blue-400 text-white transition-all duration-300"
-              >
-                <option value="all" className="bg-gray-800 text-white">All universes</option>
-                <option value="marvel" className="bg-gray-800 text-white">Marvel</option>
-                <option value="dccomics" className="bg-gray-800 text-white">DC Comics</option>
-                <option value="dragonball" className="bg-gray-800 text-white">Dragon Ball</option>
-                <option value="onepiece" className="bg-gray-800 text-white">One Piece</option>
-                <option value="attackontitan" className="bg-gray-800 text-white">Attack on Titan</option>
-                <option value="hunterxhunter" className="bg-gray-800 text-white">Hunter x Hunter</option>
-                <option value="naruto" className="bg-gray-800 text-white">Naruto</option>
-                <option value="onepunchman" className="bg-gray-800 text-white">One Punch Man</option>
-                <option value="starwars" className="bg-gray-800 text-white">Star Wars</option>
-              </select>
+              <div className="space-y-3 max-h-48 overflow-y-auto bg-white/5 rounded-xl p-4 border border-white/20">
+                {universeOptions.map((option) => (
+                  <label key={option.value} className="flex items-center gap-3 cursor-pointer hover:bg-white/10 p-2 rounded-lg transition-all duration-200">
+                    <input
+                      type="checkbox"
+                      checked={selectedUniverses.includes(option.value)}
+                      onChange={() => handleUniverseChange(option.value)}
+                      className="w-4 h-4 text-blue-400 bg-white/20 border-white/30 rounded focus:ring-blue-400 focus:ring-2"
+                    />
+                    <span className="text-white/90 font-light">{option.label}</span>
+                  </label>
+                ))}
+              </div>
             </div>
 
             {/* Gender Filter */}
-            <div className="flex-1 min-w-60">
-              <label className="flex items-center gap-2 text-sm font-medium text-white/80 mb-3 tracking-wide">
+            <div>
+              <label className="flex items-center gap-2 text-sm font-medium text-white/80 mb-4 tracking-wide">
                 <Users size={16} className="text-pink-300" />
-                Gender
+                Gender ({selectedGenders.length} selected)
               </label>
-              <select 
-                value={genderFilter}
-                onChange={(e) => setGenderFilter(e.target.value)}
-                className="w-full p-4 bg-white/20 backdrop-blur-sm border border-white/30 rounded-xl focus:ring-2 focus:ring-pink-400 focus:border-pink-400 text-white transition-all duration-300"
-              >
-                <option value="all" className="bg-gray-800 text-white">All</option>
-                <option value="male" className="bg-gray-800 text-white">Male</option>
-                <option value="female" className="bg-gray-800 text-white">Female</option>
-                <option value="other" className="bg-gray-800 text-white">Other</option>
-              </select>
+              <div className="space-y-3 bg-white/5 rounded-xl p-4 border border-white/20">
+                {genderOptions.map((option) => (
+                  <label key={option.value} className="flex items-center gap-3 cursor-pointer hover:bg-white/10 p-2 rounded-lg transition-all duration-200">
+                    <input
+                      type="checkbox"
+                      checked={selectedGenders.includes(option.value)}
+                      onChange={() => handleGenderChange(option.value)}
+                      className="w-4 h-4 text-pink-400 bg-white/20 border-white/30 rounded focus:ring-pink-400 focus:ring-2"
+                    />
+                    <span className="text-white/90 font-light">{option.label}</span>
+                  </label>
+                ))}
+              </div>
             </div>
 
             {/* Age Filter */}
-            <div className="flex-1 min-w-60">
-              <label className="flex items-center gap-2 text-sm font-medium text-white/80 mb-3 tracking-wide">
+            <div>
+              <label className="flex items-center gap-2 text-sm font-medium text-white/80 mb-4 tracking-wide">
                 <Calendar size={16} className="text-green-300" />
-                Age
+                Age ({selectedAges.length} selected)
               </label>
-              <select 
-                value={ageFilter}
-                onChange={(e) => setAgeFilter(e.target.value)}
-                className="w-full p-4 bg-white/20 backdrop-blur-sm border border-white/30 rounded-xl focus:ring-2 focus:ring-green-400 focus:border-green-400 text-white transition-all duration-300"
-              >
-                <option value="all" className="bg-gray-800 text-white">All ages</option>
-                <option value="minor" className="bg-gray-800 text-white">Under 18</option>
-                <option value="adult" className="bg-gray-800 text-white">18-100 years</option>
-                <option value="ancient" className="bg-gray-800 text-white">Over 100 years</option>
-              </select>
+              <div className="space-y-3 bg-white/5 rounded-xl p-4 border border-white/20">
+                {ageOptions.map((option) => (
+                  <label key={option.value} className="flex items-center gap-3 cursor-pointer hover:bg-white/10 p-2 rounded-lg transition-all duration-200">
+                    <input
+                      type="checkbox"
+                      checked={selectedAges.includes(option.value)}
+                      onChange={() => handleAgeChange(option.value)}
+                      className="w-4 h-4 text-green-400 bg-white/20 border-white/30 rounded focus:ring-green-400 focus:ring-2"
+                    />
+                    <span className="text-white/90 font-light">{option.label}</span>
+                  </label>
+                ))}
+              </div>
             </div>
 
             {/* Rank Filter */}
-            <div className="flex-1 min-w-60">
-              <label className="flex items-center gap-2 text-sm font-medium text-white/80 mb-3 tracking-wide">
+            <div>
+              <label className="flex items-center gap-2 text-sm font-medium text-white/80 mb-4 tracking-wide">
                 <Award size={16} className="text-yellow-300" />
-                Rank
+                Rank ({selectedRanks.length} selected)
               </label>
-              <select 
-                value={rankFilter}
-                onChange={(e) => setRankFilter(e.target.value)}
-                className="w-full p-4 bg-white/20 backdrop-blur-sm border border-white/30 rounded-xl focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 text-white transition-all duration-300"
-              >
-                <option value="all" className="bg-gray-800 text-white">All ranks</option>
-                <option value="top3" className="bg-gray-800 text-white">Top 3</option>
-                <option value="top10" className="bg-gray-800 text-white">Top 10</option>
-                <option value="top20" className="bg-gray-800 text-white">Top 20</option>
-              </select>
+              <div className="space-y-3 bg-white/5 rounded-xl p-4 border border-white/20">
+                {rankOptions.map((option) => (
+                  <label key={option.value} className="flex items-center gap-3 cursor-pointer hover:bg-white/10 p-2 rounded-lg transition-all duration-200">
+                    <input
+                      type="checkbox"
+                      checked={selectedRanks.includes(option.value)}
+                      onChange={() => handleRankChange(option.value)}
+                      className="w-4 h-4 text-yellow-400 bg-white/20 border-white/30 rounded focus:ring-yellow-400 focus:ring-2"
+                    />
+                    <span className="text-white/90 font-light">{option.label}</span>
+                  </label>
+                ))}
+              </div>
             </div>
+          </div>
+
+          {/* Clear Filters Button */}
+          <div className="mt-6 text-center">
+            <button
+              onClick={() => {
+                setSelectedUniverses([]);
+                setSelectedGenders([]);
+                setSelectedAges([]);
+                setSelectedRanks([]);
+              }}
+              className="inline-flex items-center gap-2 px-6 py-3 bg-white/20 hover:bg-white/30 text-white rounded-full font-medium transition-all duration-300 backdrop-blur-sm border border-white/30"
+            >
+              <Filter size={16} />
+              Clear All Filters
+            </button>
           </div>
         </div>
 
