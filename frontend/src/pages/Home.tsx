@@ -107,7 +107,7 @@ const Home = () => {
                   <Zap className="text-yellow-300" size={32} />
                 </div>
               </div>
-              <div className="text-4xl font-bold text-white mb-2 tracking-tight">20+</div>
+              <div className="text-4xl font-bold text-white mb-2 tracking-tight">40+</div>
               <div className="text-white/80 font-light tracking-wide">Characters</div>
             </div>
             <div className="group transform hover:scale-110 transition-all duration-300">

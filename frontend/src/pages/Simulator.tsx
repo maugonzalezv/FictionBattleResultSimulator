@@ -1,16 +1,65 @@
 import { useState } from 'react';
 import { Sword, Crown, Trophy, Zap } from 'lucide-react';
 
-// Datos temporales de personajes
+// Datos temporales de personajes expandidos
 const characters = [
+  // Dragon Ball
   { id: 1, name: "Goku", universe: "Dragon Ball", strength: 95, speed: 90, intelligence: 70, resistance: 85, totalPower: 340 },
-  { id: 2, name: "Superman", universe: "DC Comics", strength: 98, speed: 88, intelligence: 85, resistance: 95, totalPower: 366 },
-  { id: 3, name: "Naruto", universe: "Naruto", strength: 80, speed: 85, intelligence: 75, resistance: 80, totalPower: 320 },
-  { id: 4, name: "Batman", universe: "DC Comics", strength: 70, speed: 75, intelligence: 98, resistance: 75, totalPower: 318 },
-  { id: 5, name: "Saitama", universe: "One Punch Man", strength: 100, speed: 95, intelligence: 60, resistance: 90, totalPower: 345 },
+  { id: 2, name: "Vegeta", universe: "Dragon Ball", strength: 93, speed: 88, intelligence: 75, resistance: 83, totalPower: 339 },
+  { id: 3, name: "Frieza", universe: "Dragon Ball", strength: 88, speed: 92, intelligence: 85, resistance: 80, totalPower: 345 },
+  
+  // DC Comics
+  { id: 4, name: "Superman", universe: "DC Comics", strength: 98, speed: 88, intelligence: 85, resistance: 95, totalPower: 366 },
+  { id: 5, name: "Batman", universe: "DC Comics", strength: 70, speed: 75, intelligence: 98, resistance: 75, totalPower: 318 },
   { id: 6, name: "Flash", universe: "DC Comics", strength: 65, speed: 100, intelligence: 80, resistance: 70, totalPower: 315 },
   { id: 7, name: "Wonder Woman", universe: "DC Comics", strength: 90, speed: 85, intelligence: 85, resistance: 88, totalPower: 348 },
-  { id: 8, name: "Iron Man", universe: "Marvel", strength: 75, speed: 80, intelligence: 95, resistance: 85, totalPower: 335 }
+  { id: 8, name: "Aquaman", universe: "DC Comics", strength: 85, speed: 75, intelligence: 75, resistance: 90, totalPower: 325 },
+  { id: 9, name: "Green Lantern", universe: "DC Comics", strength: 80, speed: 85, intelligence: 88, resistance: 82, totalPower: 335 },
+
+  // Marvel
+  { id: 10, name: "Iron Man", universe: "Marvel", strength: 75, speed: 80, intelligence: 95, resistance: 85, totalPower: 335 },
+  { id: 11, name: "Thor", universe: "Marvel", strength: 95, speed: 78, intelligence: 70, resistance: 92, totalPower: 335 },
+  { id: 12, name: "Hulk", universe: "Marvel", strength: 100, speed: 60, intelligence: 65, resistance: 95, totalPower: 320 },
+  { id: 13, name: "Captain America", universe: "Marvel", strength: 80, speed: 75, intelligence: 85, resistance: 85, totalPower: 325 },
+  { id: 14, name: "Spider-Man", universe: "Marvel", strength: 75, speed: 90, intelligence: 88, resistance: 75, totalPower: 328 },
+  { id: 15, name: "Doctor Strange", universe: "Marvel", strength: 60, speed: 70, intelligence: 95, resistance: 80, totalPower: 305 },
+  { id: 16, name: "Scarlet Witch", universe: "Marvel", strength: 65, speed: 75, intelligence: 85, resistance: 75, totalPower: 300 },
+
+  // Naruto
+  { id: 17, name: "Naruto", universe: "Naruto", strength: 80, speed: 85, intelligence: 75, resistance: 80, totalPower: 320 },
+  { id: 18, name: "Sasuke", universe: "Naruto", strength: 82, speed: 88, intelligence: 85, resistance: 78, totalPower: 333 },
+  { id: 19, name: "Madara", universe: "Naruto", strength: 90, speed: 85, intelligence: 90, resistance: 88, totalPower: 353 },
+
+  // One Piece
+  { id: 20, name: "Luffy", universe: "One Piece", strength: 88, speed: 85, intelligence: 65, resistance: 92, totalPower: 330 },
+  { id: 21, name: "Zoro", universe: "One Piece", strength: 90, speed: 80, intelligence: 60, resistance: 85, totalPower: 315 },
+  { id: 22, name: "Sanji", universe: "One Piece", strength: 82, speed: 92, intelligence: 75, resistance: 80, totalPower: 329 },
+  { id: 23, name: "Whitebeard", universe: "One Piece", strength: 98, speed: 70, intelligence: 80, resistance: 95, totalPower: 343 },
+  { id: 24, name: "Kaido", universe: "One Piece", strength: 100, speed: 75, intelligence: 75, resistance: 98, totalPower: 348 },
+  { id: 25, name: "Shanks", universe: "One Piece", strength: 92, speed: 88, intelligence: 85, resistance: 85, totalPower: 350 },
+
+  // Attack on Titan
+  { id: 26, name: "Eren Yeager", universe: "Attack on Titan", strength: 85, speed: 80, intelligence: 80, resistance: 90, totalPower: 335 },
+  { id: 27, name: "Levi Ackerman", universe: "Attack on Titan", strength: 80, speed: 98, intelligence: 85, resistance: 75, totalPower: 338 },
+  { id: 28, name: "Mikasa Ackerman", universe: "Attack on Titan", strength: 82, speed: 90, intelligence: 80, resistance: 80, totalPower: 332 },
+  { id: 29, name: "Reiner Braun", universe: "Attack on Titan", strength: 88, speed: 70, intelligence: 75, resistance: 95, totalPower: 328 },
+
+  // Hunter x Hunter
+  { id: 30, name: "Gon Freecss", universe: "Hunter x Hunter", strength: 85, speed: 88, intelligence: 70, resistance: 80, totalPower: 323 },
+  { id: 31, name: "Killua Zoldyck", universe: "Hunter x Hunter", strength: 80, speed: 95, intelligence: 90, resistance: 75, totalPower: 340 },
+  { id: 32, name: "Hisoka", universe: "Hunter x Hunter", strength: 88, speed: 90, intelligence: 92, resistance: 80, totalPower: 350 },
+  { id: 33, name: "Netero", universe: "Hunter x Hunter", strength: 90, speed: 85, intelligence: 95, resistance: 85, totalPower: 355 },
+
+  // One Punch Man
+  { id: 34, name: "Saitama", universe: "One Punch Man", strength: 100, speed: 95, intelligence: 60, resistance: 90, totalPower: 345 },
+  { id: 35, name: "Genos", universe: "One Punch Man", strength: 85, speed: 90, intelligence: 85, resistance: 75, totalPower: 335 },
+
+  // Star Wars
+  { id: 36, name: "Luke Skywalker", universe: "Star Wars", strength: 75, speed: 80, intelligence: 85, resistance: 80, totalPower: 320 },
+  { id: 37, name: "Darth Vader", universe: "Star Wars", strength: 88, speed: 75, intelligence: 90, resistance: 92, totalPower: 345 },
+  { id: 38, name: "Yoda", universe: "Star Wars", strength: 70, speed: 85, intelligence: 98, resistance: 85, totalPower: 338 },
+  { id: 39, name: "Obi-Wan Kenobi", universe: "Star Wars", strength: 78, speed: 82, intelligence: 88, resistance: 82, totalPower: 330 },
+  { id: 40, name: "Mace Windu", universe: "Star Wars", strength: 82, speed: 85, intelligence: 90, resistance: 85, totalPower: 342 }
 ];
 
 const Simulator = () => {

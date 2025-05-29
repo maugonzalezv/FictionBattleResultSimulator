@@ -3,26 +3,51 @@ import { Star, Users, Calendar, Award, Filter } from 'lucide-react';
 
 // Datos mock de personajes expandidos
 const mockCharacters = [
-  { id: 1, name: "Saitama", universe: "Anime", gender: "Male", age: 25, powerLevel: 999, rank: 1 },
-  { id: 2, name: "Superman", universe: "DC", gender: "Male", age: 35, powerLevel: 950, rank: 2 },
-  { id: 3, name: "Goku", universe: "Anime", gender: "Male", age: 40, powerLevel: 940, rank: 3 },
-  { id: 4, name: "Wonder Woman", universe: "DC", gender: "Female", age: 5000, powerLevel: 850, rank: 4 },
-  { id: 5, name: "Thor", universe: "Marvel", gender: "Male", age: 1500, powerLevel: 840, rank: 5 },
-  { id: 6, name: "Captain Marvel", universe: "Marvel", gender: "Female", age: 35, powerLevel: 830, rank: 6 },
-  { id: 7, name: "Hulk", universe: "Marvel", gender: "Male", age: 45, powerLevel: 820, rank: 7 },
-  { id: 8, name: "Flash", universe: "DC", gender: "Male", age: 28, powerLevel: 780, rank: 8 },
-  { id: 9, name: "Naruto", universe: "Anime", gender: "Male", age: 17, powerLevel: 750, rank: 9 },
-  { id: 10, name: "Scarlet Witch", universe: "Marvel", gender: "Female", age: 30, powerLevel: 740, rank: 10 },
-  { id: 11, name: "Batman", universe: "DC", gender: "Male", age: 40, powerLevel: 720, rank: 11 },
-  { id: 12, name: "Iron Man", universe: "Marvel", gender: "Male", age: 48, powerLevel: 700, rank: 12 },
-  { id: 13, name: "Vegeta", universe: "Anime", gender: "Male", age: 42, powerLevel: 690, rank: 13 },
-  { id: 14, name: "Black Widow", universe: "Marvel", gender: "Female", age: 35, powerLevel: 650, rank: 14 },
-  { id: 15, name: "Aquaman", universe: "DC", gender: "Male", age: 38, powerLevel: 640, rank: 15 },
-  { id: 16, name: "Sailor Moon", universe: "Anime", gender: "Female", age: 16, powerLevel: 620, rank: 16 },
-  { id: 17, name: "Spider-Man", universe: "Marvel", gender: "Male", age: 22, powerLevel: 600, rank: 17 },
-  { id: 18, name: "Sasuke", universe: "Anime", gender: "Male", age: 17, powerLevel: 580, rank: 18 },
-  { id: 19, name: "Catwoman", universe: "DC", gender: "Female", age: 32, powerLevel: 550, rank: 19 },
-  { id: 20, name: "Deku", universe: "Anime", gender: "Male", age: 16, powerLevel: 520, rank: 20 },
+  // Top tier
+  { id: 1, name: "Saitama", universe: "One Punch Man", gender: "Male", age: 25, powerLevel: 999, rank: 1 },
+  { id: 2, name: "Kaido", universe: "One Piece", gender: "Male", age: 59, powerLevel: 980, rank: 2 },
+  { id: 3, name: "Shanks", universe: "One Piece", gender: "Male", age: 39, powerLevel: 970, rank: 3 },
+  { id: 4, name: "Whitebeard", universe: "One Piece", gender: "Male", age: 72, powerLevel: 960, rank: 4 },
+  { id: 5, name: "Goku", universe: "Dragon Ball", gender: "Male", age: 40, powerLevel: 950, rank: 5 },
+  { id: 6, name: "Superman", universe: "DC Comics", gender: "Male", age: 35, powerLevel: 940, rank: 6 },
+  { id: 7, name: "Vegeta", universe: "Dragon Ball", gender: "Male", age: 42, powerLevel: 930, rank: 7 },
+  { id: 8, name: "Frieza", universe: "Dragon Ball", gender: "Male", age: 70, powerLevel: 920, rank: 8 },
+  { id: 9, name: "Madara", universe: "Naruto", gender: "Male", age: 90, powerLevel: 920, rank: 9 },
+  { id: 10, name: "Netero", universe: "Hunter x Hunter", gender: "Male", age: 110, powerLevel: 910, rank: 10 },
+  
+  // High tier
+  { id: 11, name: "Hulk", universe: "Marvel", gender: "Male", age: 45, powerLevel: 900, rank: 11 },
+  { id: 12, name: "Thor", universe: "Marvel", gender: "Male", age: 1500, powerLevel: 890, rank: 12 },
+  { id: 13, name: "Yoda", universe: "Star Wars", gender: "Male", age: 900, powerLevel: 890, rank: 13 },
+  { id: 14, name: "Wonder Woman", universe: "DC Comics", gender: "Female", age: 5000, powerLevel: 880, rank: 14 },
+  { id: 15, name: "Hisoka", universe: "Hunter x Hunter", gender: "Male", age: 28, powerLevel: 880, rank: 15 },
+  { id: 16, name: "Scarlet Witch", universe: "Marvel", gender: "Female", age: 30, powerLevel: 870, rank: 16 },
+  { id: 17, name: "Darth Vader", universe: "Star Wars", gender: "Male", age: 45, powerLevel: 870, rank: 17 },
+  { id: 18, name: "Flash", universe: "DC Comics", gender: "Male", age: 28, powerLevel: 860, rank: 18 },
+  { id: 19, name: "Doctor Strange", universe: "Marvel", gender: "Male", age: 45, powerLevel: 850, rank: 19 },
+  { id: 20, name: "Mace Windu", universe: "Star Wars", gender: "Male", age: 53, powerLevel: 850, rank: 20 },
+  
+  // Mid-high tier
+  { id: 21, name: "Green Lantern", universe: "DC Comics", gender: "Male", age: 32, powerLevel: 840, rank: 21 },
+  { id: 22, name: "Luffy", universe: "One Piece", gender: "Male", age: 19, powerLevel: 830, rank: 22 },
+  { id: 23, name: "Obi-Wan Kenobi", universe: "Star Wars", gender: "Male", age: 57, powerLevel: 830, rank: 23 },
+  { id: 24, name: "Aquaman", universe: "DC Comics", gender: "Male", age: 38, powerLevel: 820, rank: 24 },
+  { id: 25, name: "Killua Zoldyck", universe: "Hunter x Hunter", gender: "Male", age: 14, powerLevel: 820, rank: 25 },
+  { id: 26, name: "Levi Ackerman", universe: "Attack on Titan", gender: "Male", age: 30, powerLevel: 810, rank: 26 },
+  { id: 27, name: "Sasuke", universe: "Naruto", gender: "Male", age: 17, powerLevel: 810, rank: 27 },
+  { id: 28, name: "Luke Skywalker", universe: "Star Wars", gender: "Male", age: 23, powerLevel: 810, rank: 28 },
+  { id: 29, name: "Iron Man", universe: "Marvel", gender: "Male", age: 48, powerLevel: 800, rank: 29 },
+  { id: 30, name: "Eren Yeager", universe: "Attack on Titan", gender: "Male", age: 19, powerLevel: 800, rank: 30 },
+  { id: 31, name: "Naruto", universe: "Naruto", gender: "Male", age: 17, powerLevel: 800, rank: 31 },
+  { id: 32, name: "Gon Freecss", universe: "Hunter x Hunter", gender: "Male", age: 14, powerLevel: 800, rank: 32 },
+  { id: 33, name: "Zoro", universe: "One Piece", gender: "Male", age: 21, powerLevel: 790, rank: 33 },
+  { id: 34, name: "Batman", universe: "DC Comics", gender: "Male", age: 40, powerLevel: 780, rank: 34 },
+  { id: 35, name: "Genos", universe: "One Punch Man", gender: "Male", age: 19, powerLevel: 780, rank: 35 },
+  { id: 36, name: "Sanji", universe: "One Piece", gender: "Male", age: 21, powerLevel: 770, rank: 36 },
+  { id: 37, name: "Mikasa Ackerman", universe: "Attack on Titan", gender: "Female", age: 19, powerLevel: 760, rank: 37 },
+  { id: 38, name: "Captain America", universe: "Marvel", gender: "Male", age: 100, powerLevel: 750, rank: 38 },
+  { id: 39, name: "Reiner Braun", universe: "Attack on Titan", gender: "Male", age: 21, powerLevel: 740, rank: 39 },
+  { id: 40, name: "Spider-Man", universe: "Marvel", gender: "Male", age: 22, powerLevel: 720, rank: 40 }
 ];
 
 const Ranking = () => {
@@ -36,7 +61,7 @@ const Ranking = () => {
     // Paso 1: Aplicar todos los filtros excepto el de rango
     let filtered = mockCharacters.filter(character => {
       // Filtro por universo
-      if (universeFilter !== "all" && character.universe.toLowerCase() !== universeFilter) {
+      if (universeFilter !== "all" && character.universe.toLowerCase().replace(/\s+/g, '') !== universeFilter) {
         return false;
       }
 
@@ -123,8 +148,13 @@ const Ranking = () => {
               >
                 <option value="all" className="bg-gray-800 text-white">All universes</option>
                 <option value="marvel" className="bg-gray-800 text-white">Marvel</option>
-                <option value="dc" className="bg-gray-800 text-white">DC</option>
-                <option value="anime" className="bg-gray-800 text-white">Anime</option>
+                <option value="dccomics" className="bg-gray-800 text-white">DC Comics</option>
+                <option value="dragonball" className="bg-gray-800 text-white">Dragon Ball</option>
+                <option value="onepiece" className="bg-gray-800 text-white">One Piece</option>
+                <option value="attackontitan" className="bg-gray-800 text-white">Attack on Titan</option>
+                <option value="hunterxhunter" className="bg-gray-800 text-white">Hunter x Hunter</option>
+                <option value="naruto" className="bg-gray-800 text-white">Naruto</option>
+                <option value="onepunchman" className="bg-gray-800 text-white">One Punch Man</option>
                 <option value="starwars" className="bg-gray-800 text-white">Star Wars</option>
               </select>
             </div>
